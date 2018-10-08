@@ -1,0 +1,45 @@
+---
+- fail:
+    msg: "This role cannot install both encoder & sourceGuardian's loader at the same time.\n
+         NOTICE: encoder is a bundle which provides licensed loaders."
+  when: sg_install_encoder and sg_install_loader
+
+- name: Create data directory
+  file:
+    path: "{{ sg_datadir }}"
+    owner: root
+    group: root
+    state: directory
+  tags:
+    - sourceguardian
+
+- name: Create temp dir
+  tempfile:
+    state: directory
+    prefix: sourceguardian-
+  register: sg_tmpdir
+  tags:
+    - sourceguardian
+    - sg-update
+
+- include: encoder.yml
+  when: sg_install_encoder
+  tags:
+    - sourceguardian
+    - sg-update
+
+- include: loader.yml
+  when: sg_install_loader
+  tags:
+    - sourceguardian
+    - sg-update
+
+- name: Deploy PHP extension config
+  template:
+    src: "40-ixed.ini.j2"
+    dest: "{{ sg_php_incdir }}/40-ixed.ini"
+    owner: root
+    group: root
+  tags:
+    - sourceguardian
+    - sg-update

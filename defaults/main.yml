@@ -1,0 +1,17 @@
+---
+sg_version: 11
+sg_php_version : 7.1
+sg_arch: x86_64
+
+sg_install_encoder: False
+sg_install_loader: False
+
+sg_encoder_archive: 'SourceGuardian-{{ sg_version }}-Linux-{{ sg_arch }}.tar.gz'
+sg_loader_archive: 'loaders.linux-{{ sg_arch }}.tar.gz'
+
+sg_encoder_url: 'http://localhost/download/{{ sg_encoder_archive }}'
+sg_loader_url: 'http://www.sourceguardian.com/loaders/download/{{ sg_loader_archive }}'
+
+sg_php_incdir: /etc/php.d
+sg_datadir: /opt/sourceguardian
+sg_loaderdir: '{{ sg_datadir }}'

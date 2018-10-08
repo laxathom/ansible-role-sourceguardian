@@ -1,0 +1,36 @@
+- name: Download app package
+  get_url:
+    url: "{{ sg_encoder_url }}"
+    dest: "{{ sg_tmpdir.path }}/"
+  tags:
+    - sourceguardian
+    - sg-update
+
+- name: Check if previous install
+  stat:
+    path: "{{ sg_datadir }}/bin/sourceguardian"
+  register: app
+  tags:
+    - sourceguardian
+    - sg-update
+
+- name: Remove previous installed version
+  file:
+    path: "{{ sg_datadir }}/{{ item }}"
+    state: absent
+  when: app.stat.exists == True
+  with_item:
+    - bin
+    - loaders
+  tags:
+    - sg-update
+
+- name: Install App package
+  unarchive:
+    src: "{{ sg_tmpdir.path }}/{{ sg_encoder_archive }}"
+    dest: "{{ sg_datadir }}"
+    remote_src: yes
+    extra_opts: "--strip-components=1"
+  tags:
+    - sourceguardian
+    - sg-update

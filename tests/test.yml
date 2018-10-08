@@ -1,0 +1,20 @@
+---
+- name: Bring up docker containers
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+      - name: sourceguardian_test_host
+        image: "chrismeyers/centos7"
+  roles:
+    - role: provision_docker
+      provision_docker_inventory: "{{ inventory }}"
+
+- name: Run SourceGuardian deployment test
+  hosts: docker_containers
+
+  vars:
+    sg_install_loader: True
+
+  roles:
+    - sourceguardian

@@ -1,0 +1,4 @@
+### Ansible ###
+*.retry
+ansible.cfg
+tests/roles/provision_docker/
